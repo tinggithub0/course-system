@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Token;
 
-use Illuminate\Validation\Rule;
 use App\Http\Requests\BaseRequest;
 
 class StoreRequest extends BaseRequest
@@ -12,9 +11,7 @@ class StoreRequest extends BaseRequest
      */
     public function authorize(): bool
     {
-        parent::authorize();
-
-        return $this->user()->role === 1;
+        return true;
     }
 
     /**
@@ -25,13 +22,7 @@ class StoreRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'user_id' => [
-                'required',
-                'int',
-                Rule::exists('users', 'id')->where(function ($query) {
-                    $query->whereIn('role', [2, 3]);
-                }),
-            ],
+            'user_id' => 'required|int|exists:users,id',
             'token_name' => 'required|string|max:255',
         ];
     }

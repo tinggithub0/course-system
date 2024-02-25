@@ -4,8 +4,8 @@ namespace Tests\Feature;
 
 use Carbon\Carbon;
 use Tests\TestCase;
-use App\Models\Course;
 use App\Models\User;
+use App\Models\Course;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -19,7 +19,8 @@ class CourseTest extends TestCase
         $page = 1;
         $courses = Course::factory()->count($perPage)->create();
 
-        $response = $this->get("/api/courses?page={$page}&per_page={$perPage}");
+        $response = $this->createUserWithTokenRequest()
+            ->get("/api/courses?page={$page}&per_page={$perPage}");
 
         $response->assertStatus(200)
             ->assertJsonStructure([
@@ -61,7 +62,7 @@ class CourseTest extends TestCase
 
     public function test_store_course()
     {
-        $teacher_id = User::factory()->create(['role' => 2])->id;
+        $teacher_id = User::factory()->create(['role' => User::ROLE_TEACHER])->id;
 
         $courseData = [
             'teacher_id' => $teacher_id,
@@ -71,7 +72,8 @@ class CourseTest extends TestCase
             'end_time' => Carbon::now()->addHour()->format('Hi'),
         ];
 
-        $response = $this->post('/api/courses', $courseData);
+        $response = $this->createUserWithTokenRequest(null, $teacher_id)
+            ->post('/api/courses', $courseData);
 
         $response->assertStatus(201)
             ->assertJsonStructure([
@@ -100,7 +102,8 @@ class CourseTest extends TestCase
             'end_time' => $newEndTime,
         ];
 
-        $response = $this->patch("/api/courses/{$course->id}", $newData);
+        $response = $this->createUserWithTokenRequest(null, null, $course->teacher)
+            ->patch("/api/courses/{$course->id}", $newData);
 
         $response->assertStatus(200)
             ->assertJsonFragment($newData);
@@ -110,7 +113,8 @@ class CourseTest extends TestCase
     {
         $course = Course::factory()->create();
 
-        $response = $this->delete("/api/courses/{$course->id}");
+        $response = $this->createUserWithTokenRequest(null, null, $course->teacher)
+            ->delete("/api/courses/{$course->id}");
 
         $response->assertStatus(204);
 

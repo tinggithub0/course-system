@@ -28,7 +28,7 @@ class CourseController extends Controller
 
         return response(
             new CourseResource(
-                $course::with('teacher')->find($course->user_id)
+                $course::with('teacher')->find($course->id)
             ), 201
         );
     }

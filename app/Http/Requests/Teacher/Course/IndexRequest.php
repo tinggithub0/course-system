@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Teacher\Course;
 
+use App\Models\User;
 use Illuminate\Validation\Rule;
 use App\Http\Requests\BaseRequest;
 use Illuminate\Database\Query\Builder;
@@ -19,7 +20,7 @@ class IndexRequest extends BaseRequest
                 'required',
                 'integer',
                 Rule::exists('users', 'id')->where(function (Builder $query) {
-                    return $query->where('role', 2);
+                    return $query->where('role', User::ROLE_TEACHER);
                 }),
             ]
         ]);

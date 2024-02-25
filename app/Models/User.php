@@ -12,6 +12,10 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    const ROLE_ADMIN = 1;
+    const ROLE_TEACHER = 2;
+    const ROLE_STUDENT = 3;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -46,12 +50,12 @@ class User extends Authenticatable
 
     public function scopeTeachers($query): void
     {
-        $query->where('role', 2);
+        $query->where('role', self::ROLE_TEACHER);
     }
 
     public function scopeStudents($query): void
     {
-        $query->where('role', 3);
+        $query->where('role', self::ROLE_STUDENT);
     }
 
     public function courses(): \Illuminate\Database\Eloquent\Relations\HasMany

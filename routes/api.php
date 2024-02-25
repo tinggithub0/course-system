@@ -18,11 +18,12 @@ use App\Http\Controllers\TeacherCourseController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/tokens', [TokenController::class, 'store']);
+Route::post('/tokens', [TokenController::class, 'store'])
+    ->withoutMiddleware('auth:sanctum');
 
 Route::apiResource('teachers', TeacherController::class)
     ->only(['index', 'store']);

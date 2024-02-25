@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Course;
 
+use App\Models\User;
 use App\Http\Requests\BaseRequest;
 
 class StoreRequest extends BaseRequest
@@ -14,7 +15,7 @@ class StoreRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'teacher_id' => 'required|exists:users,id,role,2',
+            'teacher_id' => 'required|exists:users,id,role,' . User::ROLE_TEACHER,
             'name' => 'required|string|max:255',
             'introduction' => 'required|string',
             'start_time' => 'required|date_format:Hi',

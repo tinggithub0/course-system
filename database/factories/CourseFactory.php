@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,11 +18,13 @@ class CourseFactory extends Factory
     public function definition(): array
     {
         return [
-            'teacher_id' => \App\Models\User::factory()->create()->id,
+            'teacher_id' => \App\Models\User::factory()
+                ->create(['role' => User::ROLE_TEACHER])
+                ->id,
             'name' => $this->faker->name,
             'introduction' => $this->faker->text,
-            'start_time' => $this->faker->time('Hi'),
-            'end_time' => $this->faker->time('Hi'),
+            'start_time' => $this->faker->dateTimeBetween('-1 hours', 'now')->format('Hi'),
+            'end_time' => $this->faker->dateTimeBetween('now', '+1 hours')->format('Hi'),
         ];
     }
 }

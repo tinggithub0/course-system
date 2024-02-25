@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Str;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -23,7 +24,7 @@ class TeacherFactory extends Factory
             'email_verified_at' => now(),
             'password' => 'password', // password
             'remember_token' => Str::random(10),
-            'role' => 2,
+            'role' => User::ROLE_TEACHER,
         ];
     }
 }

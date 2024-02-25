@@ -25,7 +25,7 @@ class TeacherController extends Controller
     {
         $teacher = [
             ...$request->validated(),
-            'role' => 2
+            'role' => User::ROLE_TEACHER,
         ];
         $user = User::create($teacher);
 
