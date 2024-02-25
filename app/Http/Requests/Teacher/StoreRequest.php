@@ -19,16 +19,4 @@ class StoreRequest extends BaseRequest
             'password' => 'required|string|max:255',
         ];
     }
-
-    /**
-     * Get the error messages for the defined validation rules.
-     *
-     * @return array<string, string>
-     */
-    public function messages(): array
-    {
-        return [
-            '*.required' => ':attribute is required',
-        ];
-    }
 }

@@ -13,9 +13,11 @@ class CourseController extends Controller
 {
     public function index(Request $request)
     {
-        $page = $request->page ?? 1;
-        $perPage = $request->per_page ?? self::DEFAULT_PER_PAGE;
-        $courses = Course::with('teacher')->simplePaginate($perPage, ['*'], 'page', $page);
+        $page = (int) $request->page ?? 1;
+        $perPage = (int) $request->per_page ?? self::DEFAULT_PER_PAGE;
+
+        $courses = Course::with('teacher')
+            ->simplePaginate($perPage, ['*'], 'page', $page);
 
         return response(new CourseCollection($courses, $page, $perPage), 200);
     }
@@ -24,12 +26,16 @@ class CourseController extends Controller
     {
         $course = Course::create($request->validated());
 
-        return response(new CourseResource($course::with('teacher')->find($course->user_id)), 201);
+        return response(
+            new CourseResource(
+                $course::with('teacher')->find($course->user_id)
+            ), 201
+        );
     }
 
-    public function update(UpdateRequest $request, $id)
+    public function update(UpdateRequest $request, Course $course)
     {
-        $course = Course::findOrFail($id);
+        $this->authorize('update', $course);
 
         $course->fill($request->validated());
         if ($course->end_time <= $course->start_time) {
@@ -43,9 +49,11 @@ class CourseController extends Controller
         return response(new CourseResource($course), 200);
     }
 
-    public function destroy(int $id)
+    public function destroy(Course $course)
     {
-        Course::findOrFail($id)->delete();
+        $this->authorize('delete', $course);
+
+        $course->delete();
 
         return response(null, 204);
     }

@@ -46,12 +46,12 @@ class User extends Authenticatable
 
     public function scopeTeachers($query): void
     {
-        $query->where('role', 1);
+        $query->where('role', 2);
     }
 
     public function scopeStudents($query): void
     {
-        $query->where('role', 2);
+        $query->where('role', 3);
     }
 
     public function courses(): \Illuminate\Database\Eloquent\Relations\HasMany

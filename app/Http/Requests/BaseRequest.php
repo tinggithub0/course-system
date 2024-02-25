@@ -13,7 +13,7 @@ abstract class BaseRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return filled($this->user());
     }
 
     protected function failedValidation(Validator $validator)

@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Course;
+namespace App\Http\Requests\Token;
 
+use Illuminate\Validation\Rule;
 use App\Http\Requests\BaseRequest;
 
-class UpdateRequest extends BaseRequest
+class StoreRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +14,7 @@ class UpdateRequest extends BaseRequest
     {
         parent::authorize();
 
-        return $this->user()->role === 2;
+        return $this->user()->role === 1;
     }
 
     /**
@@ -24,11 +25,14 @@ class UpdateRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'teacher_id' => 'exists:users,id,role,2',
-            'name' => 'string|max:255',
-            'introduction' => 'string',
-            'start_time' => 'date_format:Hi',
-            'end_time' => 'date_format:Hi|after:start_time',
+            'user_id' => [
+                'required',
+                'int',
+                Rule::exists('users', 'id')->where(function ($query) {
+                    $query->whereIn('role', [2, 3]);
+                }),
+            ],
+            'token_name' => 'required|string|max:255',
         ];
     }
 }

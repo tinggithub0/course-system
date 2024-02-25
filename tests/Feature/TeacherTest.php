@@ -42,7 +42,7 @@ class TeacherTest extends TestCase
             'name' => $faker->name,
             'email' => $faker->unique()->safeEmail,
             'password' => bcrypt('password123'),
-            'role' => 1,
+            'role' => 2,
         ];
 
         $response = $this->post('/api/teachers', $userData);

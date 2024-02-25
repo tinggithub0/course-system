@@ -61,7 +61,7 @@ class CourseTest extends TestCase
 
     public function test_store_course()
     {
-        $teacher_id = User::factory()->create(['role' => 1])->id;
+        $teacher_id = User::factory()->create(['role' => 2])->id;
 
         $courseData = [
             'teacher_id' => $teacher_id,

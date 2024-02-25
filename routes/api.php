@@ -2,8 +2,10 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TokenController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\TeacherCourseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,15 +22,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix('teachers')->group(function () {
-    Route::get('/', [TeacherController::class, 'index']);
-    Route::post('/', [TeacherController::class, 'store']);
-    Route::get('/{id}/courses', [TeacherController::class, 'courses']);
-});
+Route::post('/tokens', [TokenController::class, 'store']);
 
-Route::prefix('courses')->group(function () {
-    Route::get('/', [CourseController::class, 'index']);
-    Route::post('/', [CourseController::class, 'store']);
-    Route::patch('/{id}', [CourseController::class, 'update']);
-    Route::delete('/{id}', [CourseController::class, 'destroy']);
-});
+Route::apiResource('teachers', TeacherController::class)
+    ->only(['index', 'store']);
+Route::apiResource('teachers.courses', TeacherCourseController::class)
+    ->only(['index']);
+
+Route::apiResource('courses', CourseController::class)
+    ->only(['index', 'store', 'update', 'destroy']);

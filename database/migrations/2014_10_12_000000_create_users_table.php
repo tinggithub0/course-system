@@ -15,11 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->unsignedTinyInteger('role')->default(2)->comment('1: 講師, 2: 學生');
+            $table->unsignedTinyInteger('role')->comment('1: 管理者, 2: 講師, 3: 學生');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+            $table->index('role');
         });
     }
 
