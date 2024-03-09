@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests\Teacher\Course;
 
-use App\Models\User;
-use Illuminate\Validation\Rule;
+use App\Rules\HasRole;
+use App\Enums\UserRole;
 use App\Http\Requests\BaseRequest;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Validator;
 
 class IndexRequest extends BaseRequest
@@ -19,9 +18,7 @@ class IndexRequest extends BaseRequest
             'id' => [
                 'required',
                 'integer',
-                Rule::exists('users', 'id')->where(function (Builder $query) {
-                    return $query->where('role', User::ROLE_TEACHER);
-                }),
+                new HasRole(UserRole::TEACHER->value),
             ]
         ]);
 

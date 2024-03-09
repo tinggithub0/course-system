@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Faker\Factory;
 use Tests\TestCase;
 use App\Models\User;
+use App\Enums\UserRole;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -43,7 +44,7 @@ class TeacherTest extends TestCase
             'password' => bcrypt('password123'),
         ];
 
-        $response = $this->createUserWithTokenRequest(User::ROLE_ADMIN)
+        $response = $this->createUserWithTokenRequest(UserRole::ADMIN->value)
             ->post('/api/teachers', $userData);
 
         $response->assertStatus(201);

@@ -2,11 +2,11 @@
 
 namespace Tests\Feature;
 
-use Faker\Factory;
+use Carbon\Carbon;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Course;
-use Carbon\Carbon;
+use App\Enums\UserRole;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -17,7 +17,7 @@ class TeacherCourseTest extends TestCase
     public function test_get_teacher_courses()
     {
         $perPage = 5;
-        $teacher = User::factory()->create(['role' => User::ROLE_TEACHER]);
+        $teacher = User::factory()->create()->assignRole(UserRole::TEACHER->value);
         $courses = Course::factory()->count($perPage)->create(['teacher_id' => $teacher->id]);
 
         $response = $this->createUserWithTokenRequest(null, null, $teacher)

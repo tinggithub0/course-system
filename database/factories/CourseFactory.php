@@ -18,9 +18,7 @@ class CourseFactory extends Factory
     public function definition(): array
     {
         return [
-            'teacher_id' => \App\Models\User::factory()
-                ->create(['role' => User::ROLE_TEACHER])
-                ->id,
+            'teacher_id' => User::factory()->create()->assignRole('teacher')->id,
             'name' => $this->faker->name,
             'introduction' => $this->faker->text,
             'start_time' => $this->faker->dateTimeBetween('-1 hours', 'now')->format('Hi'),

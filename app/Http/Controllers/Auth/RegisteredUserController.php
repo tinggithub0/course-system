@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Enums\UserRole;
 
 class RegisteredUserController extends Controller
 {
@@ -40,9 +41,9 @@ class RegisteredUserController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'role' => User::ROLE_ADMIN,
             'password' => Hash::make($request->password),
         ]);
+        $user->assignRole(UserRole::ADMIN->value);
 
         event(new Registered($user));
 

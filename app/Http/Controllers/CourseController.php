@@ -13,8 +13,8 @@ class CourseController extends Controller
 {
     public function index(Request $request)
     {
-        $page = (int) $request->page ?? 1;
-        $perPage = (int) $request->per_page ?? self::DEFAULT_PER_PAGE;
+        $page = $request->page ?? 1;
+        $perPage = $request->per_page ?? self::DEFAULT_PER_PAGE;
 
         $courses = Course::with('teacher')
             ->simplePaginate($perPage, ['*'], 'page', $page);

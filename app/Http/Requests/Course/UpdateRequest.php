@@ -2,7 +2,8 @@
 
 namespace App\Http\Requests\Course;
 
-use App\Models\User;
+use App\Rules\HasRole;
+use App\Enums\UserRole;
 use App\Http\Requests\BaseRequest;
 
 class UpdateRequest extends BaseRequest
@@ -14,7 +15,7 @@ class UpdateRequest extends BaseRequest
     {
         parent::authorize();
 
-        return $this->user()->role === User::ROLE_TEACHER;
+        return $this->user()->hasRole(UserRole::TEACHER->value);
     }
 
     /**
@@ -25,7 +26,10 @@ class UpdateRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'teacher_id' => 'exists:users,id,role,' . User::ROLE_TEACHER,
+            'teacher_id' => [
+                'exists:users,id',
+                new HasRole(UserRole::TEACHER->value),
+            ],
             'name' => 'string|max:255',
             'introduction' => 'string',
             'start_time' => 'date_format:Hi',

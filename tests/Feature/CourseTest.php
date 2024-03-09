@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Course;
+use App\Enums\UserRole;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -62,7 +63,7 @@ class CourseTest extends TestCase
 
     public function test_store_course()
     {
-        $teacher_id = User::factory()->create(['role' => User::ROLE_TEACHER])->id;
+        $teacher_id = User::factory()->create()->assignRole(UserRole::TEACHER->value)->id;
 
         $courseData = [
             'teacher_id' => $teacher_id,

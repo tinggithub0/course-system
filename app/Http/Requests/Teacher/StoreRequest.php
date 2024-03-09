@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Teacher;
 
-use App\Models\User;
+use App\Enums\UserRole;
 use App\Http\Requests\BaseRequest;
 
 class StoreRequest extends BaseRequest
@@ -14,7 +14,7 @@ class StoreRequest extends BaseRequest
     {
         parent::authorize();
 
-        return $this->user()->role === User::ROLE_ADMIN;
+        return $this->user()->hasRole(UserRole::ADMIN->value);
     }
 
     /**

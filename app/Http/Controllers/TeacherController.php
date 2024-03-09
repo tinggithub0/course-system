@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Enums\UserRole;
 use Illuminate\Http\Request;
 use App\Http\Resources\TeacherResource;
 use App\Http\Resources\TeacherCollection;
@@ -12,10 +13,10 @@ class TeacherController extends Controller
 {
     public function index(Request $request)
     {
-        $page = (int) $request->page ?? 1;
-        $perPage = (int) $request->per_page ?? self::DEFAULT_PER_PAGE;
+        $page = $request->page ?? 1;
+        $perPage = $request->per_page ?? self::DEFAULT_PER_PAGE;
 
-        $teachers = User::teachers()
+        $teachers = User::role(UserRole::TEACHER->value)
             ->simplePaginate($perPage, ['*'], 'page', $page);
 
         return response(new TeacherCollection($teachers, $page, $perPage), 200);
@@ -25,9 +26,9 @@ class TeacherController extends Controller
     {
         $teacher = [
             ...$request->validated(),
-            'role' => User::ROLE_TEACHER,
         ];
         $user = User::create($teacher);
+        $user->assignRole(UserRole::TEACHER->value);
 
         return response(new TeacherResource($user), 201);
     }

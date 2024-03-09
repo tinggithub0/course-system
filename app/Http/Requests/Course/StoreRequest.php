@@ -2,7 +2,8 @@
 
 namespace App\Http\Requests\Course;
 
-use App\Models\User;
+use App\Rules\HasRole;
+use App\Enums\UserRole;
 use App\Http\Requests\BaseRequest;
 
 class StoreRequest extends BaseRequest
@@ -15,7 +16,11 @@ class StoreRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'teacher_id' => 'required|exists:users,id,role,' . User::ROLE_TEACHER,
+            'teacher_id' => [
+                'required',
+                'exists:users,id',
+                new HasRole(UserRole::TEACHER->value),
+            ],
             'name' => 'required|string|max:255',
             'introduction' => 'required|string',
             'start_time' => 'required|date_format:Hi',

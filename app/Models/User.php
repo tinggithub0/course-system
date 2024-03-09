@@ -2,19 +2,16 @@
 
 namespace App\Models;
 
+use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Notifications\Notifiable;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
-
-    const ROLE_ADMIN = 1;
-    const ROLE_TEACHER = 2;
-    const ROLE_STUDENT = 3;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -24,7 +21,6 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'role',
         'password',
     ];
 
@@ -47,16 +43,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
-
-    public function scopeTeachers($query): void
-    {
-        $query->where('role', self::ROLE_TEACHER);
-    }
-
-    public function scopeStudents($query): void
-    {
-        $query->where('role', self::ROLE_STUDENT);
-    }
 
     public function courses(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
